@@ -118,7 +118,8 @@ class FavoriteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Favorite $favorite)
-    {
-        //
+    {   
+        $favorite->delete();
+        return redirect(url()->previous());
     }
 }

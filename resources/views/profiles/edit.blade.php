@@ -5,6 +5,46 @@
 @section('title', '新規作成')
 
 {{-- application.blade.phpの@yield('content')に以下のレイアウトを代入 --}}
+
+@section('css')
+<style>
+.main_img {
+  width: 150px;
+  height: 100px;
+  object-fit: cover; /* この一行を追加するだけ！ */
+}
+</style>
+@endsection
+
+@section('js')
+<script> 
+function check(shop_name){
+
+	if(window.confirm('「'+shop_name+'」を削除します。\n\nよろしいですか？')){ // 確認ダイアログを表示
+    // if(window.confirm('「'shop_name+'」を削除します。\n\nよろしいですか？')){ // 確認ダイアログを表示
+
+		return true; // 「OK」時は送信を実行
+
+	}
+	else{ // 「キャンセル」時の処理
+
+		// window.alert('キャンセルされました'); // 警告ダイアログを表示
+		return false; // 送信を中止
+
+	}
+
+}
+function del_check(shop_name) {
+  bootbox.confirm(shop_name + "を削除しますか?", function (result) {
+    if (result) {
+      return true
+    } else {
+      return false
+    }
+});
+}
+</script>
+@endsection
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -64,48 +104,42 @@
               <button type="submit" class="btn btn-primary">更　新</button>
             </form>
         </div>
+        @if (!empty( $posts ))
         <div class="col-md-12 mt-5">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">店舗名</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach ($posts as $post)
+          <table class="table">
+            <thead>
               <tr>
-                <th scope="row">1</th>
-                <td>{{$post->post_title}}</td>
-                <td>
-                {{$post->tanto_name->meta_value}}
-                  {{--dd($post->post_metas)--}}
-                  @foreach ($post->post_metas as $meta)
-                    {{dd($meta)}}
-                  @endforeach
-                </td>
-                <td>@mdo</td>
+                <th scope="col">No</th>
+                <th scope="col">画像</th>
+                <th scope="col">店舗名</th>
+                <th scope="col">住所</th>
+                <th scope="col">TEL</th>
+                <th scope="col">操作</th>
               </tr>
-            @endforeach
-
-            <!-- <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>@twitter</td>
-            </tr> -->
-          </tbody>
-        </table>
-
+            </thead>
+            <tbody>
+              @foreach ($posts as $post)
+                <tr>
+                  <th scope="row">{{$loop->iteration}}</th>
+                  <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank"><img src="{{$post->shop_main_image->guid}}" class="main_img"></a></td>
+                  <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank">{{$post->post_title}}</a></td>
+                  <td>{{$post->address->meta_value}}</td>
+                  <td>{{$post->tel_no->meta_value}}</td>
+                  <td>
+                    <form style="display:inline" action="{{ url('favorite/'.$post->favorite->id) }}" method="post" onSubmit="return check('{{$post->post_title}}');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            {{ __('Delete') }}
+                        </button>
+                    </form>
+                  </td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
         </div>
+        @endif
     </div>
 </div>
 @endsection

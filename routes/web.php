@@ -20,7 +20,10 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 // Route::get('/mypage', 'MyPageController@index');
 Route::resource('/mypage', 'MyPageController')->middleware('auth');
+
 Route::get('/favorite/{pref}/{shop_id}/{shop_slug}/', 'FavoriteController@index')->middleware('auth');
+Route::delete('/favorite/{favorite}', 'FavoriteController@destroy')->middleware('auth');
+
 // Route::get('/favorite/{pref}/{shop_id}/{shop_slug}/{return_url}', 'FavoriteController@index')->middleware('auth');
 
 // Route::resource('/favorite/{id}', 'FavoriteController')->middleware('auth');
