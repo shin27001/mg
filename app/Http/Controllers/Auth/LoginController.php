@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+use Illuminate\Http\Request;
+
 class LoginController extends Controller
 {
     /*
@@ -26,8 +28,9 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/mypage';
-    // protected $redirectTo = RouteServiceProvider::HOME;
+    // protected $redirectTo = '/mypage';
+    protected $redirectTo = RouteServiceProvider::HOME;
+
 
     /**
      * Create a new controller instance.
@@ -39,9 +42,39 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function redirectPath()
+    protected function loggedOut(\Illuminate\Http\Request $request)
     {
-        return 'mypage/';
-        //例）return 'costs/index';
-    }    
+        return redirect(env('WP_URL'));
+    }
+    // public function redirectPath()
+    // {   
+
+    //     return '/mypage';
+
+    //     $cookie = $_COOKIE['redirect_url'];
+    //     setcookie('redirect_url', "", time()-60);
+    //     return ($cookie) ? $cookie : '/mypage';
+    // }
+
+     /**
+     * Show the application's login form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showLoginForm(Request $request)
+    {
+        if($request->page) {
+            session(['url.intended' => '/'.$request->page]);
+            return view('auth.login');
+        }
+
+        // ここから
+        if (array_key_exists('HTTP_REFERER', $_SERVER)) {
+            session(['url.intended' => $_SERVER['HTTP_REFERER']]);
+            // $path = parse_url($_SERVER['HTTP_REFERER']); // URLを分解
+        }
+        // ここまで追加
+        return view('auth.login');
+    }
+
 }

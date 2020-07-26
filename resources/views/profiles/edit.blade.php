@@ -2,7 +2,7 @@
 @extends('layouts.app')
 
 {{-- @yield('title')にテンプレートごとの値を代入 --}}
-@section('title', '新規作成')
+@section('title', 'マイページ')
 
 {{-- application.blade.phpの@yield('content')に以下のレイアウトを代入 --}}
 
@@ -19,36 +19,42 @@
 @section('js')
 <script> 
 function check(shop_name){
-
 	if(window.confirm('「'+shop_name+'」を削除します。\n\nよろしいですか？')){ // 確認ダイアログを表示
-    // if(window.confirm('「'shop_name+'」を削除します。\n\nよろしいですか？')){ // 確認ダイアログを表示
-
 		return true; // 「OK」時は送信を実行
-
 	}
 	else{ // 「キャンセル」時の処理
-
-		// window.alert('キャンセルされました'); // 警告ダイアログを表示
 		return false; // 送信を中止
-
 	}
-
 }
-function del_check(shop_name) {
-  bootbox.confirm(shop_name + "を削除しますか?", function (result) {
-    if (result) {
-      return true
-    } else {
-      return false
-    }
-});
+function account_delete_check(){
+	if(window.confirm('アカウントを削除します。\n\nよろしいですか？')){ // 確認ダイアログを表示
+		return true; // 「OK」時は送信を実行
+	}
+	else{ // 「キャンセル」時の処理
+		return false; // 送信を中止
+	}
 }
 </script>
 @endsection
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+      <div class="col-md-9">
+        <!-- 4個分のタブ -->
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a href="#profile" class="nav-link active" data-toggle="tab">プロフィール</a>
+          </li>
+          <li class="nav-item">
+            <a href="#favorite" class="nav-link" data-toggle="tab">お気に入り</a>
+          </li>
+          <!-- <li class="nav-item">
+            <a href="#contact" class="nav-link" data-toggle="tab">お問い合わせ</a>
+          </li> -->
+        </ul>
+
+        <div class="tab-content">
+          <div id="profile" class="tab-pane active">
             <div class="form-group">
               <label for="name">お名前</label>
               <input type="text" class="form-control" id="name" value="{{$user->name}}" disabled="disabled">
@@ -86,8 +92,6 @@ function del_check(shop_name) {
               </div>
 
               <div class="form-group">
-                
-
                 <label for="gender">性別</label>
                 <select id="gender" name="gender" class="custom-select" style="width:150px;">
                   <option>選択して下さい</option>
@@ -103,43 +107,60 @@ function del_check(shop_name) {
 
               <button type="submit" class="btn btn-primary">更　新</button>
             </form>
-        </div>
-        @if (!empty( $posts ))
-        <div class="col-md-12 mt-5">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">No</th>
-                <th scope="col">画像</th>
-                <th scope="col">店舗名</th>
-                <th scope="col">住所</th>
-                <th scope="col">TEL</th>
-                <th scope="col">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach ($posts as $post)
+            <!-- <form id="" action="{{ route('logout') }}" class="mt-5" method="POST"> -->
+            <div class="mt-5">
+            <form style="display:inline" action="{{ url('mypage/'.$user->id) }}" method="POST" onSubmit="return account_delete_check();">
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="btn btn-danger">アカウント削除</button>
+            </form>
+            </div>
+          </div>
+          <div id="favorite" class="tab-pane">
+            @if (!empty( $posts ))
+            <table class="table">
+              <thead>
                 <tr>
-                  <th scope="row">{{$loop->iteration}}</th>
-                  <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank"><img src="{{$post->shop_main_image->guid}}" class="main_img"></a></td>
-                  <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank">{{$post->post_title}}</a></td>
-                  <td>{{$post->address->meta_value}}</td>
-                  <td>{{$post->tel_no->meta_value}}</td>
-                  <td>
-                    <form style="display:inline" action="{{ url('favorite/'.$post->favorite->id) }}" method="post" onSubmit="return check('{{$post->post_title}}');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">
-                            {{ __('Delete') }}
-                        </button>
-                    </form>
-                  </td>
+                  <th scope="col">No</th>
+                  <th scope="col">画像</th>
+                  <th scope="col">店舗名</th>
+                  <th scope="col">住所</th>
+                  <th scope="col">TEL</th>
+                  <th scope="col">操作</th>
                 </tr>
-              @endforeach
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                @foreach ($posts as $post)
+                  <tr>
+                    <th scope="row">{{$loop->iteration}}</th>
+                    <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank"><img src="{{$post->shop_main_image->guid}}" class="main_img"></a></td>
+                    <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank">{{$post->post_title}}</a></td>
+                    <td>{{$post->address->meta_value}}</td>
+                    <td>{{$post->tel_no->meta_value}}</td>
+                    <td>
+                      <form style="display:inline" action="{{ url('favorite/'.$post->favorite->id) }}" method="post" onSubmit="return check('{{$post->post_title}}');">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit" class="btn btn-danger">
+                              {{ __('Delete') }}
+                          </button>
+                      </form>
+                    </td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+            @else
+              <div class="col-md-8 mt-5 mx-auto">
+                お気に入りが登録されていません
+              </div>
+            @endif
+          </div>
+          <div id="contact" class="tab-pane">
+            contact
+          </div>
         </div>
-        @endif
+      </div>
     </div>
 </div>
 @endsection

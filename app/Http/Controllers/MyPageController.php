@@ -15,10 +15,7 @@ class MyPageController extends Controller
     public function db_name($pref) {
         return ($pref == 'okinawa') ? 'mysql_wp_ok' : 'mysql_wp_kt';
     }
-    public function index()
-    {
-        $user = \Auth::user();
-
+    public function get_favorites(User $user) {
         $post = new Post;
         $meta = new PostMeta;
         $posts = [];
@@ -39,7 +36,14 @@ class MyPageController extends Controller
             // dd($image);
             $posts[] = $p;
         }
+        return $posts;
+    }
 
+    
+    public function index()
+    {
+        $user = \Auth::user();
+        $posts = $this->get_favorites($user);
         return view('profiles.edit', [
             'user' => $user,
             'posts' => $posts,
@@ -57,9 +61,9 @@ class MyPageController extends Controller
     public function store(Request $request) 
     {
         $profile = new Profile; 
-        $profile->fill( $request->all() ); 
+        $profile->fill($request->all()); 
         $profile->save(); 
-        return redirect('/mypage/'.$profile->user_id.'/edit'); 
+        return redirect('/mypage'); 
     } 
 
     // public function show($id) 
@@ -72,9 +76,11 @@ class MyPageController extends Controller
 
     public function edit($id) 
     { 
-        $user = User::find($id); 
+        $user = User::find($id);
+        $posts = $this->get_favorites($user);
         return view('profiles.edit', [ 
             'user' => $user,
+            'posts' => $posts,
         ]); 
     } 
 
@@ -82,14 +88,16 @@ class MyPageController extends Controller
     {   
         $profile = Profile::find($id);
         $profile->fill($request->all()); 
-        $profile->save(); 
-        return redirect('/mypage/'.$profile->user_id.'/edit'); 
+        $profile->save();
+        return redirect('/mypage'); 
     } 
-    // public function destroy($id) 
-    // { 
-    //     $profile = Profile::find($id); 
-    //     $profile->delete(); 
-    //     return redirect('/profiles'); 
-    // } 
+    
+    
+    public function destroy($id) 
+    { 
+        $user = User::find($id); 
+        $user->delete();
+        return redirect(env('WP_URL')); 
+    } 
 
 }
