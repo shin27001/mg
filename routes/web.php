@@ -11,10 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/favorite/auth', 'FavoriteController@auth');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', 'MyPageController@index')->middleware('auth');
+// Route::get('/favorite/auth', 'FavoriteController@auth');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
