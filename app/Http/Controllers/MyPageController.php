@@ -43,6 +43,9 @@ class MyPageController extends Controller
     public function index()
     {
         $user = \Auth::user();
+
+        dd($user);
+
         $posts = $this->get_favorites($user);
         return view('profiles.edit', [
             'user' => $user,
