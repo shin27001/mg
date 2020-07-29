@@ -43,8 +43,9 @@ class MyPageController extends Controller
     public function index()
     {
         $user = \Auth::user();
-
-        dd($user);
+        if ($user->profile->isEmpty()) {
+            return redirect('/mypage/create'); 
+        }
 
         $posts = $this->get_favorites($user);
         return view('profiles.edit', [
