@@ -74,21 +74,24 @@ class RegisterController extends Controller
     }
 
 
-    public function showRegistrationForm() {
-        if(isset($_SERVER['HTTP_REFERER'])) {
-            $intended = $_SERVER['HTTP_REFERER'];
-        } else {
-            $intended = '/';
-        }
-        Log::debug('デバッグメッセージ');
-        Log::debug($intended);
+    // public function showRegistrationForm() {
+    //     if(isset($_SERVER['HTTP_REFERER'])) {
+    //         $intended = $_SERVER['HTTP_REFERER'];
+    //     } else {
+    //         $intended = '/';
+    //     }
+    //     Log::debug('デバッグメッセージ');
+    //     Log::debug($intended);
         
 
-        session(['url.intended' => $intended]);
-        return view('auth.register');
-    }
+    //     session(['url.intended' => $intended]);
+    //     return view('auth.register');
+    // }
     
     protected function registered(Request $request, $user) {
+        Log::debug('デバッグメッセージ');
+        Log::debug(session('url.intended'));
+
         return redirect(session('url.intended'));
         // return redirect('users/' . $user->id)->with('my_status', 'ユーザー登録はまただ完了していません。メールに記載されているリンクをクリックしてください。');
     }
