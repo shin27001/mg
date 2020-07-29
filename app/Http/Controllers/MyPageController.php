@@ -43,7 +43,7 @@ class MyPageController extends Controller
     public function index()
     {
         $user = \Auth::user();
-        if ($user->profile->isEmpty()) {
+        if ($user->profile) {
             return redirect('/mypage/create'); 
         }
 
