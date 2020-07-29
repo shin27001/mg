@@ -25,8 +25,10 @@ Route::resource('/mypage', 'MyPageController')->middleware('auth');
 // Route::delete('/mypage/{id}', 'FavoriteController@destroy')->middleware('auth');
 
 
-Route::get('/favorite/{pref}/{shop_id}/{shop_slug}/', 'FavoriteController@index')->middleware('auth');
-Route::delete('/favorite/{favorite}', 'FavoriteController@destroy')->middleware('auth');
+Route::get('/favorite/{pref}/{shop_id}/{shop_slug}/', 'FavoriteController@index');
+Route::delete('/favorite/{favorite}', 'FavoriteController@destroy');
+// Route::get('/favorite/{pref}/{shop_id}/{shop_slug}/', 'FavoriteController@index')->middleware('auth');
+// Route::delete('/favorite/{favorite}', 'FavoriteController@destroy')->middleware('auth');
 
 // Route::get('/favorite/{pref}/{shop_id}/{shop_slug}/{return_url}', 'FavoriteController@index')->middleware('auth');
 

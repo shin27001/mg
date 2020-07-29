@@ -7,9 +7,17 @@ use Illuminate\Http\Request;
 // use Auth;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 
 class FavoriteController extends Controller
 {
+
+    public function __construct()
+    {
+
+        // $request->fullUrl()
+        $this->middleware('auth');
+    }
 
     public function auth()
     {
