@@ -22,7 +22,7 @@ class CreateProfilesTable extends Migration
             $table->string('tel_no');
             $table->string('birthday');
             $table->string('gender');
-            $table->text('self_introduce');            
+            $table->text('self_introduce');
             $table->timestamps();
             $table->softDeletes();
         });
