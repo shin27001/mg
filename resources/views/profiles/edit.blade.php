@@ -48,9 +48,9 @@ function account_delete_check(){
           <li class="nav-item">
             <a href="#favorite" class="nav-link" data-toggle="tab">お気に入り</a>
           </li>
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <a href="#contact" class="nav-link" data-toggle="tab">お問い合わせ</a>
-          </li> -->
+          </li>
         </ul>
 
         <div class="tab-content">
@@ -104,8 +104,9 @@ function account_delete_check(){
                 <label for="self_introduce">自己紹介</label>
                 <textarea name="self_introduce" class="form-control" id="self_introduce" rows="8">{{$user->profile->self_introduce}}</textarea>
               </div>
-
-              <button type="submit" class="btn btn-primary">更　新</button>
+              <div class="text-right">
+                <button type="submit" class="btn btn-primary">更　新</button>
+              </div>
             </form>
             <!-- <form id="" action="{{ route('logout') }}" class="mt-5" method="POST"> -->
             <div class="mt-5">
@@ -157,7 +158,23 @@ function account_delete_check(){
             @endif
           </div>
           <div id="contact" class="tab-pane">
-            contact
+            <div class="alert alert-warning border text-secondary mt-3 mb-3 p-3" style="">
+              <p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>お知らせ</p>
+              <p>お問い合わせ内容によりましては、ご返信までお時間をいただく場合がございますので、予めご了承ください。</p>
+            </div>
+            <form action="{{ url('mypage/'.$user->profile->id) }}" method="post">
+              <div class="form-group">
+                <label for="title">タイトル</label>
+                <input type="email" class="form-control" id="title" placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="comment">お問い合わせ内容</label>
+                <textarea class="form-control" id="comment" rows="8"></textarea>
+              </div>
+              <div class="text-right">
+                <button type="submit" class="btn btn-primary">送　信</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

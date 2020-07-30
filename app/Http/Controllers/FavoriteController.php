@@ -14,7 +14,7 @@ class FavoriteController extends Controller
 
     public function __construct()
     {
-
+        
         // $request->fullUrl()
         $this->middleware('auth');
     }
