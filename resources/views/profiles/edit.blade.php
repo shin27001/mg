@@ -48,13 +48,19 @@ function account_delete_check(){
           <li class="nav-item">
             <a href="#favorite" class="nav-link" data-toggle="tab">お気に入り</a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="#contact" class="nav-link" data-toggle="tab">お問い合わせ</a>
-          </li>
+          </li> -->
         </ul>
 
         <div class="tab-content">
           <div id="profile" class="tab-pane active">
+            @if (session('flash_message'))
+              <div class="alert alert-success border mt-3 mb-3 p-3">
+                <p><i class="fas fa-info-circle"></i>お知らせ</p>
+                <p>{{ session('flash_message') }}</p>
+              </div>
+            @endif
             <div class="form-group">
               <label for="name">お名前</label>
               <input type="text" class="form-control" id="name" value="{{$user->name}}" disabled="disabled">

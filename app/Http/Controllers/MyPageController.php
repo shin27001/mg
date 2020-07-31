@@ -64,10 +64,30 @@ class MyPageController extends Controller
 
     public function store(Request $request) 
     {
+
+        $validator = \Validator::make($request->all(), [
+            'user_id'  => 'required',
+            'nickname' => 'required',
+            'zip_code' => 'required',
+            'address'  => 'required',
+            'tel_no'   => 'required',
+        ],[
+            'user_id.required'  => 'ユーザIDが不明です。新規登録を行って下さい。',
+            'nickname.required' => 'ニックネームを入力して下さい。',
+            'zip_code.required' => '郵便番号を入力して下さい。',
+            'address.required'  => '住所を入力して下さい。',
+            'tel_no.required'   => '電話番号を入力して下さい。',
+        ]);
+        //バリデーションルールにでエラーの場合 
+        if ($validator->fails()) {
+            return redirect('/mypage/create')->withInput()->withErrors($validator);
+        }
+        //----        
         $profile = new Profile; 
         $profile->fill($request->all()); 
-        $profile->save(); 
-        return redirect('/mypage'); 
+        $profile->save();
+
+        return redirect('/mypage')->with('flash_message', 'プロフィールの登録が完了しました！'); 
     } 
 
     // public function show($id) 
