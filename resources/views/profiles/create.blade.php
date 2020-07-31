@@ -11,7 +11,6 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             @if(count($errors) > 0)
-              <!-- <div class="card p-1 m-1 bg-info text-white">{{$errors->first('nickname')}}</div> -->
               <div class="alert alert-warning border text-secondary mt-3 mb-3 p-3" style="">
                 <p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>お知らせ</p>
                 <p>未入力の項目があります！</p>
