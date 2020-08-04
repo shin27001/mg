@@ -11,9 +11,9 @@
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/enum', function () {
+    return view('welcome');
+});
 
 Route::get('/', 'MyPageController@index')->middleware('auth');
 // Route::get('/favorite/auth', 'FavoriteController@auth');

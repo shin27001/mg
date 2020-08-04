@@ -48,9 +48,9 @@ function account_delete_check(){
           <li class="nav-item">
             <a href="#favorite" class="nav-link" data-toggle="tab">お気に入り</a>
           </li>
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <a href="#contact" class="nav-link" data-toggle="tab">お問い合わせ</a>
-          </li> -->
+          </li>
         </ul>
 
         <div class="tab-content">
@@ -123,7 +123,7 @@ function account_delete_check(){
             </form>
             </div>
           </div>
-          <div id="favorite" class="tab-pane">
+          <div id="favorite" class="tab-pane fade">
             @if (!empty( $posts ))
             <table class="table">
               <thead>
@@ -163,12 +163,12 @@ function account_delete_check(){
               </div>
             @endif
           </div>
-          <div id="contact" class="tab-pane">
+          <div id="contact" class="tab-pane fade">
             <div class="alert alert-warning border text-secondary mt-3 mb-3 p-3" style="">
               <p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>お知らせ</p>
               <p>お問い合わせ内容によりましては、ご返信までお時間をいただく場合がございますので、予めご了承ください。</p>
             </div>
-            <form action="{{ url('mypage/'.$user->profile->id) }}" method="post">
+            <form action="{{ url('inquiry/'.$user->profile->id) }}" method="post">
               <div class="form-group">
                 <label for="title">タイトル</label>
                 <input type="email" class="form-control" id="title" placeholder="">
@@ -181,6 +181,70 @@ function account_delete_check(){
                 <button type="submit" class="btn btn-primary">送　信</button>
               </div>
             </form>
+            <!-- <div class="divider"></div> -->
+            <hr>
+            <div class="accordion mt-5" id="inquiries">
+              @foreach ($user->inquiries as $inquiry)
+                <div class="card">
+                  <div class="card-header" id="title-{{$inquiry->id}}">
+                    <h5 class="mb-0">
+                      <span class="badge badge-primary">New</span>
+                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#comment-{{$inquiry->id}}" aria-expanded="false" aria-controls="comment-{{$inquiry->id}}">
+                        {{$inquiry->title}}
+                      </button>
+                    </h5>
+                  </div>
+
+                  <div id="comment-{{$inquiry->id}}" class="collapse show" aria-labelledby="title-{{$inquiry->id}}" data-parent="#inquiries">
+                    <div class="card-body">
+                      {{$inquiry->comment}}
+                      <div class="mt-3">
+                      @foreach ($inquiry->replies as $reply)
+                        <div class="alert alert-info border mb-2">
+                          {{$reply->comment}}
+                        </div>
+                      @endforeach
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <hr> -->
+                  <!-- <div id="comment-{{$inquiry->id}}" class="collapse show" aria-labelledby="title-{{$inquiry->id}}" data-parent="#inquiries">
+                    <div class="card-body">
+                      {{$inquiry->comment}}
+                    </div>
+                  </div> -->
+                </div>
+              @endforeach
+              <!-- <div class="card">
+                <div class="card-header" id="headingTwo">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      Collapsible Group Item #2
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                  <div class="card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="headingThree">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      Collapsible Group Item #3
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                  <div class="card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                  </div>
+                </div>
+              </div> -->
+            </div><!-- //#inquiries -->
+
           </div>
         </div>
       </div>
