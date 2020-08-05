@@ -83,6 +83,7 @@ class RegisterController extends Controller
         // }
         Log::debug('デバッグメッセージ');
         Log::debug(session('url.intended'));
+        Log::debug(session('favorite'));
         
 
         // session(['url.intended' => $intended]);
@@ -90,7 +91,15 @@ class RegisterController extends Controller
     }
     
     protected function registered(Request $request, $user) {
-        return redirect(session('url.intended'));
+        Log::debug('registeredメッセージ');
+        Log::debug(session('favorite'));
+
+
+        if(!empty(session('favorite'))) {
+            return redirect(session('favorite'));
+        } else {
+            return redirect(session('url.intended'));
+        }
         // return redirect('users/' . $user->id)->with('my_status', 'ユーザー登録はまただ完了していません。メールに記載されているリンクをクリックしてください。');
     }
 

@@ -14,7 +14,29 @@ class FavoriteController extends Controller
 
     public function __construct()
     {
+
+        // $path = parse_url($_SERVER['HTTP_REFERER']); // URLを分解
+        // echo url()->full();
+        Log::debug(url()->full());
+        Log::debug(parse_url(url()->full()));
         
+
+        if (!\Auth::check()) {
+            Log::debug('ログインしていない');
+            // セッションへ保存
+            session(['favorite' => url()->full()]);
+        }
+
+        // dd(url());
+        // $path = parse_url(url()->full());
+        // if (!empty($path['path'])) {
+        //     list($controller, $pref, $shop_id, $shop_slug) = explode("/", $path['path']);
+        //     if(!empty($shop_id)) {
+        //         // セッションへ保存
+        //         session(['url.favorite' => url()->full()]);
+        //     }
+        // }
+
         // $request->fullUrl()
         $this->middleware('auth');
     }
@@ -47,7 +69,10 @@ class FavoriteController extends Controller
             $favorite->shop_slug = htmlspecialchars($shop_slug, ENT_QUOTES);
             $favorite->save();
         }
-        return redirect(url()->previous());
+        session()->forget('favorite');
+        return redirect(session('url.intended'));
+        // return redirect(url()->previous());
+
         // return response()->json();
         // exit;
         // return true;
