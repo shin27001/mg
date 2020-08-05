@@ -17,8 +17,8 @@ class FavoriteController extends Controller
 
         // $path = parse_url($_SERVER['HTTP_REFERER']); // URLを分解
         // echo url()->full();
-        Log::debug(url()->full());
-        Log::debug(parse_url(url()->full()));
+        Log::debug(url()->full(), ['file' => __FILE__, 'line' => __LINE__]);
+        Log::debug(parse_url(url()->full()), ['file' => __FILE__, 'line' => __LINE__]);
         
 
         if (!\Auth::check()) {
@@ -70,8 +70,12 @@ class FavoriteController extends Controller
             $favorite->save();
         }
         session()->forget('favorite');
-        return redirect(session('url.intended'));
-        // return redirect(url()->previous());
+        Log::debug(session('url.intended'), ['file' => __FILE__, 'line' => __LINE__]);
+        if (session('url.intended')) {
+            return redirect(session('url.intended'));
+        } else {
+            return redirect(url()->previous());
+        }
 
         // return response()->json();
         // exit;
