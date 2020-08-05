@@ -53,7 +53,6 @@
 
               <div class="form-group">
                 <label for="">生年月日</label>
-                <!-- <input type="text" name="birthday" class="form-control" id="birthday" value="{{old('birthday')}}" placeholder="(例)1990/08/01"> -->
                 <input type="date" name="birthday" class="form-control" id="birthday" value="{{old('birthday')}}" max="{{date('Y-m-d')}}" style="width:200px;">
               </div>
 
