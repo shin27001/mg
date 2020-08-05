@@ -51,6 +51,6 @@ class User extends Authenticatable
     }
     public function inquiries()
     {
-     return $this->hasMany('App\Inquiry');
+     return $this->hasMany('App\Inquiry')->orderBy('updated_at', 'DESC');
     }
 }

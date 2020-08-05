@@ -82,7 +82,7 @@ class MyPageController extends Controller
         if ($validator->fails()) {
             return redirect('/mypage/create')->withInput()->withErrors($validator);
         }
-        //----        
+ 
         $profile = new Profile; 
         $profile->fill($request->all()); 
         $profile->save();
@@ -99,7 +99,7 @@ class MyPageController extends Controller
     // } 
 
     public function edit($id) 
-    { 
+    {
         $user = User::find($id);
         $posts = $this->get_favorites($user);
         return view('profiles.edit', [ 
@@ -110,10 +110,28 @@ class MyPageController extends Controller
 
     public function update(Request $request, $id) 
     {   
+        $validator = \Validator::make($request->all(), [
+            'user_id'  => 'required',
+            'nickname' => 'required',
+            'zip_code' => 'required',
+            'address'  => 'required',
+            'tel_no'   => 'required',
+        ],[
+            'user_id.required'  => 'ユーザIDが不明です。新規登録を行って下さい。',
+            'nickname.required' => 'ニックネームを入力して下さい。',
+            'zip_code.required' => '郵便番号を入力して下さい。',
+            'address.required'  => '住所を入力して下さい。',
+            'tel_no.required'   => '電話番号を入力して下さい。',
+        ]);
+        //バリデーションルールにでエラーの場合 
+        if ($validator->fails()) {
+            return redirect('/mypage/'.$request->input('user_id').'/edit')->withInput()->withErrors($validator);
+        }
+
         $profile = Profile::find($id);
         $profile->fill($request->all()); 
         $profile->save();
-        return redirect('/mypage'); 
+        return redirect('/mypage')->with('flash_message', 'プロフィールの更新が完了しました！'); 
     } 
     
     

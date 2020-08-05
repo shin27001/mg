@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Inquiry;
+use App\InquiryReply;
 
-class InquiryController extends Controller
+class InquiryReplyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -36,28 +36,31 @@ class InquiryController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         $validator = \Validator::make($request->all(), [
-            'user_id' => 'required',
-            'title'   => 'required',
-            'comment' => 'required',
+            'inquiry_id'    => 'required',
+            'reply_comment' => 'required',
         ],[
-            'user_id.required' => 'ユーザIDが不明です。新規登録を行って下さい。',
-            'title.required'   => 'タイトルを入力して下さい。',
-            'comment.required' => 'お問い合せ内容を入力して下さい。',
+            'inquiry_id.required'    => 'お問い合せIDが不明です。再度ログインして下さい。',
+            'reply_comment.required' => 'お問い合せ内容を入力して下さい。',
         ]);
         //バリデーションルールにでエラーの場合 
         if ($validator->fails()) {
-            return redirect('/mypage')->withInput()->withErrors($validator)->with(['active_tab' => 'contact']);
+            return redirect('/mypage')->withInput()
+                    ->withErrors($validator)
+                    ->with([
+                        'active_tab' => 'contact',
+                        'active_collapse' => $request->input('inquiry_id')
+                    ]);
         }
                
-        $inquiry = new Inquiry; 
-        $inquiry->fill($request->all()); 
-        $inquiry->save();
+        $inquiry_reply = new InquiryReply; 
+        $inquiry_reply->fill($request->all()); 
+        $inquiry_reply->save();
 
         return redirect('/mypage')->with([
             'flash_inquiry_message' => 'お問い合せの登録が完了しました！',
-            'active_tab' => 'contact'
+            'active_tab' => 'contact',
+            'active_collapse' => $request->input('inquiry_id')
         ]);
     }
 
@@ -67,10 +70,10 @@ class InquiryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+    // public function show($id)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -78,10 +81,10 @@ class InquiryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+    // public function edit($id)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -90,10 +93,10 @@ class InquiryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    // public function update(Request $request, $id)
+    // {
+    //     //
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -101,8 +104,8 @@ class InquiryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
+    // public function destroy($id)
+    // {
+    //     //
+    // }
 }

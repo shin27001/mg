@@ -10,7 +10,7 @@ class InquiryReply extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'inquiry_id', 'comment'
+        'inquiry_id', 'reply_comment'
     ];
     
     

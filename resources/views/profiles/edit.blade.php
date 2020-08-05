@@ -43,25 +43,25 @@ function account_delete_check(){
         <!-- 4個分のタブ -->
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a href="#profile" class="nav-link active" data-toggle="tab">プロフィール</a>
+            <a href="#profile" class="nav-link @if (!session('active_tab')) active @endif" data-toggle="tab">プロフィール</a>
           </li>
           <li class="nav-item">
             <a href="#favorite" class="nav-link" data-toggle="tab">お気に入り</a>
           </li>
           <li class="nav-item">
-            <a href="#contact" class="nav-link" data-toggle="tab">お問い合わせ</a>
+            <a href="#contact" class="nav-link @if (session('active_tab') == 'contact') active @endif" data-toggle="tab">お問い合わせ</a>
           </li>
         </ul>
 
         <div class="tab-content">
-          <div id="profile" class="tab-pane active">
+          <div id="profile" class="tab-pane fade @if (!session('active_tab')) show active @endif">
             @if (session('flash_message'))
               <div class="alert alert-success border mt-3 mb-3 p-3">
                 <p><i class="fas fa-info-circle"></i>お知らせ</p>
                 <p>{{ session('flash_message') }}</p>
               </div>
             @endif
-            <div class="form-group">
+            <div class="form-group mt-3">
               <label for="name">お名前</label>
               <input type="text" class="form-control" id="name" value="{{$user->name}}" disabled="disabled">
             </div>
@@ -70,31 +70,35 @@ function account_delete_check(){
               <input type="text" class="form-control" id="mail" value="{{$user->email}}" disabled="disabled">
             </div>
 
-            <form action="{{ url('mypage/'.$user->profile->id) }}" method="post">
+            <form action="{{ url('mypage/'.$user->profile->id) }}" method="POST">
               @csrf
               @method('PUT')
-              <!-- <input type="hidden" name="user_id" value="{{$user->id}}"> -->
+              <input type="hidden" name="user_id" value="{{$user->id}}">
               <div class="form-group">
                 <label for="nickname">ニックネーム</label>
                 <input type="text" name="nickname" class="form-control" id="nickname" value="{{$user->profile->nickname}}" aria-describedby="nicknameHelp" placeholder="ニックネームを入力して下さい">
                 <small id="nicknameHelp" class="form-text text-muted">本サービスでは、名前の代わりにニックネームが表示されます。</small>
+                @if($errors->has('nickname')) <div class="p-1 m-1 bg-info text-white">{{$errors->first('nickname')}}</div> @endif
               </div>
               <div class="form-group">
                 <label for="zip_code">郵便番号</label>
-                <input type="text" name="zip_code" class="form-control" id="zip_code" value="{{$user->profile->zip_code}}" style="width:200px;" placeholder="103-0001">
+                <input type="text" name="zip_code" class="form-control" id="zip_code" value="{{$user->profile->zip_code}}" style="width:200px;" placeholder="(例)103-0001">
+                @if($errors->has('zip_code')) <div class="p-1 m-1 bg-info text-white">{{$errors->first('zip_code')}}</div> @endif
               </div>
               <div class="form-group">
                 <label for="address">ご住所</label>
-                <input type="text" name="address" class="form-control" id="address" value="{{$user->profile->address}}" placeholder="東京都港区新橋1-2-3">
+                <input type="text" name="address" class="form-control" id="address" value="{{$user->profile->address}}" placeholder="(例)東京都港区新橋1-2-3">
+                @if($errors->has('address')) <div class="p-1 m-1 bg-info text-white">{{$errors->first('address')}}</div> @endif
               </div>
               <div class="form-group">
                 <label for="tel_no">電話番号</label>
-                <input type="text" name="tel_no" class="form-control" id="tel_no" value="{{$user->profile->tel_no}}" placeholder="03-1234-5678">
+                <input type="text" name="tel_no" class="form-control" id="tel_no" value="{{$user->profile->tel_no}}" placeholder="(例)03-1234-5678">
+                @if($errors->has('tel_no')) <div class="p-1 m-1 bg-info text-white">{{$errors->first('tel_no')}}</div> @endif
               </div>
 
               <div class="form-group">
                 <label for="">生年月日</label>
-                <input type="text" name="birthday" class="form-control" id="birthday" value="{{$user->profile->birthday}}" placeholder="1990/08/01">
+                <input type="date" name="birthday" class="form-control" id="birthday" value="{{$user->profile->birthday}}" max="{{date('Y-m-d')}}" style="width:200px;">
               </div>
 
               <div class="form-group">
@@ -125,7 +129,7 @@ function account_delete_check(){
           </div>
           <div id="favorite" class="tab-pane fade">
             @if (!empty( $posts ))
-            <table class="table">
+            <table class="table mt-3">
               <thead>
                 <tr>
                   <th scope="col">No</th>
@@ -163,19 +167,30 @@ function account_delete_check(){
               </div>
             @endif
           </div>
-          <div id="contact" class="tab-pane fade">
+          <div id="contact" class="tab-pane fade @if (session('active_tab') == 'contact') show active @endif">
+            @if (session('flash_inquiry_message'))
+              <div class="alert alert-success border mt-3 mb-3 p-3">
+                <p><i class="fas fa-info-circle"></i>お知らせ</p>
+                <p>{{ session('flash_inquiry_message') }}</p>
+              </div>
+            @endif
             <div class="alert alert-warning border text-secondary mt-3 mb-3 p-3" style="">
               <p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>お知らせ</p>
               <p>お問い合わせ内容によりましては、ご返信までお時間をいただく場合がございますので、予めご了承ください。</p>
             </div>
-            <form action="{{ url('inquiry/'.$user->profile->id) }}" method="post">
+            <form action="{{url('inquiry/')}}" method="POST">
+              @csrf
+              @method('POST')
+              <input type="hidden" name="user_id" value="{{$user->id}}">
               <div class="form-group">
                 <label for="title">タイトル</label>
-                <input type="email" class="form-control" id="title" placeholder="">
+                <input type="text" class="form-control" name="title" value="{{old('title')}}" placeholder="(例)○○について">
+                @if($errors->has('title')) <div class="p-1 m-1 bg-info text-white">{{$errors->first('title')}}</div> @endif
               </div>
               <div class="form-group">
                 <label for="comment">お問い合わせ内容</label>
-                <textarea class="form-control" id="comment" rows="8"></textarea>
+                <textarea class="form-control" name="comment" placeholder="(例)ご要望・ご質問等、ご自由にお書き下さい。" rows="8">{{old('comment')}}</textarea>
+                @if($errors->has('comment')) <div class="p-1 m-1 bg-info text-white">{{$errors->first('comment')}}</div> @endif
               </div>
               <div class="text-right">
                 <button type="submit" class="btn btn-primary">送　信</button>
@@ -189,21 +204,39 @@ function account_delete_check(){
                   <div class="card-header" id="title-{{$inquiry->id}}">
                     <h5 class="mb-0">
                       <span class="badge badge-primary">New</span>
+                      @if(count($inquiry->replies) > 0)<span class="badge badge-pill badge-success">{{count($inquiry->replies)}}</span>@endif
                       <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#comment-{{$inquiry->id}}" aria-expanded="false" aria-controls="comment-{{$inquiry->id}}">
                         {{$inquiry->title}}
                       </button>
                     </h5>
                   </div>
 
-                  <div id="comment-{{$inquiry->id}}" class="collapse show" aria-labelledby="title-{{$inquiry->id}}" data-parent="#inquiries">
+                  <div id="comment-{{$inquiry->id}}" class="collapse @if(session('active_collapse') == $inquiry->id) show @endif" aria-labelledby="title-{{$inquiry->id}}" data-parent="#inquiries">
                     <div class="card-body">
-                      {{$inquiry->comment}}
+                      {{$inquiry->created_at}}
+                      <p>{{$inquiry->comment}}</p>
                       <div class="mt-3">
                       @foreach ($inquiry->replies as $reply)
                         <div class="alert alert-info border mb-2">
-                          {{$reply->comment}}
+                          {{$reply->created_at}}
+                          <p>{{$reply->reply_comment}}</p>
                         </div>
                       @endforeach
+                      </div>
+                      <div class="mt-3">
+                        <form action="{{url('inquiry_reply/')}}" method="POST">
+                          @csrf
+                          @method('POST')
+                          <input type="hidden" name="inquiry_id" value="{{$inquiry->id}}">
+                          <div class="form-group">
+                            <label for="reply_comment">コメント</label>
+                            <textarea class="form-control" id="reply_comment" name="reply_comment" placeholder="返信内容" rows="8">{{old('reply_comment')}}</textarea>
+                            @if($errors->has('reply_comment') && (session('active_collapse') == $inquiry->id)) <div class="p-1 m-1 bg-info text-white">{{$errors->first('reply_comment')}}</div> @endif
+                          </div>
+                          <div class="text-right">
+                            <button type="submit" class="btn btn-primary">送　信</button>
+                          </div>
+                        </form>  
                       </div>
                     </div>
                   </div>

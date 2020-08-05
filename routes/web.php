@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/enum', function () {
-    return view('welcome');
-});
+// Route::get('/enum', function () {
+//     return view('welcome');
+// });
 
 Route::get('/', 'MyPageController@index')->middleware('auth');
 // Route::get('/favorite/auth', 'FavoriteController@auth');
@@ -23,6 +23,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 // Route::get('/mypage', 'MyPageController@index');
 Route::resource('/mypage', 'MyPageController')->middleware('auth');
 // Route::delete('/mypage/{id}', 'FavoriteController@destroy')->middleware('auth');
+
+Route::resource('/inquiry', 'InquiryController')->middleware('auth');
+Route::post('/inquiry_reply', 'InquiryReplyController@store')->middleware('auth');
 
 
 Route::get('/favorite/{pref}/{shop_id}/{shop_slug}/', 'FavoriteController@index');
