@@ -35,9 +35,10 @@ class FavoriteController extends Controller
     {   
         \Debugbar::disable();
 
-        $favorite = Favorite::where('pref', $pref)->where('pref', $pref)->where('shop_id', $shop_id)->get();
+        $user = \Auth::user();
+
+        $favorite = Favorite::where('user_id', $user->id)->where('pref', $pref)->where('shop_id', $shop_id)->get();
         if($favorite->isEmpty()) {
-            $user = \Auth::user();
 
             $favorite = new Favorite;
             $favorite->user_id = $user->id;
