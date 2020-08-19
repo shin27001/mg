@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../../okinawa/wp-load.php';
+//require __DIR__ . '/../../okinawa/wp-load.php';
 
 /**
  * Laravel - A PHP Framework For Web Artisans
