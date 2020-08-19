@@ -15,6 +15,10 @@
 //     return view('welcome');
 // });
 
+// Route::get('/data', function(){
+//   return "hello";
+// });
+
 Route::get('/', 'MyPageController@index')->middleware('auth');
 // Route::get('/favorite/auth', 'FavoriteController@auth');
 Auth::routes();

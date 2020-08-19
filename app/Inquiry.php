@@ -21,4 +21,8 @@ class Inquiry extends Model
      {
          return $this->hasMany('App\InquiryReply');
      }
+     public function user()
+     {
+         return $this->belongsTo('App\User');
+     }
 }

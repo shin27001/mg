@@ -13,10 +13,17 @@ use Illuminate\Http\Request;
 |
 */
 // Route::get("/data", function(){
-//     return [
+//     return response()->json([
 //      "message" => "hello world !!"
-//     ];
+//     ]);
 //    });
+
+Route::group(['middleware' => ['api']], function(){
+    Route::get('/data', function(){
+        return response()->json(Auth::user());
+        // return "hello";
+    });
+});
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

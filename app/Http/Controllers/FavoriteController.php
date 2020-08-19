@@ -70,7 +70,7 @@ class FavoriteController extends Controller
             $favorite->save();
         }
         session()->forget('favorite');
-        Log::debug(session('url.intended'), ['file' => __FILE__, 'line' => __LINE__]);
+        // Log::debug(session('url.intended'), ['file' => __FILE__, 'line' => __LINE__]);
         if (session('url.intended')) {
             return redirect(session('url.intended'));
         } else {

@@ -75,23 +75,23 @@ function account_delete_check(){
               @method('PUT')
               <input type="hidden" name="user_id" value="{{$user->id}}">
               <div class="form-group">
-                <label for="nickname">ニックネーム</label>
+                <label for="nickname">ニックネーム</label>&nbsp;<span class="badge badge-danger">必須</span>
                 <input type="text" name="nickname" class="form-control" id="nickname" value="{{$user->profile->nickname}}" aria-describedby="nicknameHelp" placeholder="ニックネームを入力して下さい">
                 <small id="nicknameHelp" class="form-text text-muted">本サービスでは、名前の代わりにニックネームが表示されます。</small>
                 @if($errors->has('nickname')) <div class="p-1 m-1 bg-info text-white">{{$errors->first('nickname')}}</div> @endif
               </div>
               <div class="form-group">
-                <label for="zip_code">郵便番号</label>
+                <label for="zip_code">郵便番号</label>&nbsp;<span class="badge badge-danger">必須</span>
                 <input type="text" name="zip_code" class="form-control" id="zip_code" value="{{$user->profile->zip_code}}" style="width:200px;" placeholder="(例)103-0001">
                 @if($errors->has('zip_code')) <div class="p-1 m-1 bg-info text-white">{{$errors->first('zip_code')}}</div> @endif
               </div>
               <div class="form-group">
-                <label for="address">ご住所</label>
+                <label for="address">ご住所</label>&nbsp;<span class="badge badge-danger">必須</span>
                 <input type="text" name="address" class="form-control" id="address" value="{{$user->profile->address}}" placeholder="(例)東京都港区新橋1-2-3">
                 @if($errors->has('address')) <div class="p-1 m-1 bg-info text-white">{{$errors->first('address')}}</div> @endif
               </div>
               <div class="form-group">
-                <label for="tel_no">電話番号</label>
+                <label for="tel_no">電話番号</label>&nbsp;<span class="badge badge-danger">必須</span>
                 <input type="text" name="tel_no" class="form-control" id="tel_no" value="{{$user->profile->tel_no}}" placeholder="(例)03-1234-5678">
                 @if($errors->has('tel_no')) <div class="p-1 m-1 bg-info text-white">{{$errors->first('tel_no')}}</div> @endif
               </div>

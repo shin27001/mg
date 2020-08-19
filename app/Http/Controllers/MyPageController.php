@@ -57,6 +57,10 @@ class MyPageController extends Controller
     public function create() 
     {   
         $user = \Auth::user();
+        if ($user->profile) {
+            return redirect('/mypage'); 
+        }
+
         return view('profiles.create', [ 
             'user' => $user
         ]); 
@@ -67,16 +71,21 @@ class MyPageController extends Controller
 
         $validator = \Validator::make($request->all(), [
             'user_id'  => 'required',
-            'nickname' => 'required',
-            'zip_code' => 'required',
-            'address'  => 'required',
-            'tel_no'   => 'required',
+            'nickname' => 'required|unique:profiles|max:20',
+            'zip_code' => 'required|max:8',
+            'address'  => 'required|max:150',
+            'tel_no'   => 'required|max:15',
         ],[
             'user_id.required'  => 'ユーザIDが不明です。新規登録を行って下さい。',
             'nickname.required' => 'ニックネームを入力して下さい。',
             'zip_code.required' => '郵便番号を入力して下さい。',
             'address.required'  => '住所を入力して下さい。',
             'tel_no.required'   => '電話番号を入力して下さい。',
+            'nickname.max' => 'ニックネームは20文字以内で入力して下さい。',
+            'zip_code.max' => '郵便番号は8桁で入力して下さい。',
+            'address.max'  => '住所は150文字以内で入力して下さい。',
+            'tel_no.max'   => '電話番号は15桁以内で入力して下さい。',
+            'nickname.unique' => 'このニックネームはすでに登録があります。他のニックネームをご登録下さい。',
         ]);
         //バリデーションルールにでエラーの場合 
         if ($validator->fails()) {
@@ -110,18 +119,36 @@ class MyPageController extends Controller
 
     public function update(Request $request, $id) 
     {   
+        // $validator = \Validator::make($request->all(), [
+        //     'user_id'  => 'required',
+        //     'nickname' => 'required',
+        //     'zip_code' => 'required',
+        //     'address'  => 'required',
+        //     'tel_no'   => 'required',
+        // ],[
+        //     'user_id.required'  => 'ユーザIDが不明です。新規登録を行って下さい。',
+        //     'nickname.required' => 'ニックネームを入力して下さい。',
+        //     'zip_code.required' => '郵便番号を入力して下さい。',
+        //     'address.required'  => '住所を入力して下さい。',
+        //     'tel_no.required'   => '電話番号を入力して下さい。',
+        // ]);
+
         $validator = \Validator::make($request->all(), [
             'user_id'  => 'required',
-            'nickname' => 'required',
-            'zip_code' => 'required',
-            'address'  => 'required',
-            'tel_no'   => 'required',
+            'nickname' => 'required|max:20',
+            'zip_code' => 'required|max:8',
+            'address'  => 'required|max:150',
+            'tel_no'   => 'required|max:15',
         ],[
             'user_id.required'  => 'ユーザIDが不明です。新規登録を行って下さい。',
             'nickname.required' => 'ニックネームを入力して下さい。',
             'zip_code.required' => '郵便番号を入力して下さい。',
             'address.required'  => '住所を入力して下さい。',
             'tel_no.required'   => '電話番号を入力して下さい。',
+            'nickname.max' => 'ニックネームは20文字以内で入力して下さい。',
+            'zip_code.max' => '郵便番号は8桁で入力して下さい。',
+            'address.max'  => '住所は150文字以内で入力して下さい。',
+            'tel_no.max'   => '電話番号は15桁以内で入力して下さい。',
         ]);
         //バリデーションルールにでエラーの場合 
         if ($validator->fails()) {
