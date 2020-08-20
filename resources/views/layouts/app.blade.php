@@ -117,7 +117,7 @@
       <!-- Java script-->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
       <script src="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/wp-content/themes/ryukyu-leaf/scripts/vendors/slick.js"></script>
-      <!-- <script src="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/wp-content/themes/ryukyu-leaf/scripts/main.js?<?php echo date('Ymd-Hi'); ?>"></script> -->
+      <script src="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/wp-content/themes/ryukyu-leaf/scripts/main.js?<?php echo date('Ymd-Hi'); ?>"></script>
       <!-- <script src="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/wp-content/themes/ryukyu-leaf/scripts/libs/main-slider.js"></script> -->
   </div>
   @yield('js')
