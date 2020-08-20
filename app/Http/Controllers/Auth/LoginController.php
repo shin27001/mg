@@ -109,6 +109,6 @@ class LoginController extends Controller
         ]);
         // \Log::debug($user_info);
         # クッキーへ保存
-        setcookie('user_info', $user_info, time()+24*60*60, '/', '.rlf.local');
+        setcookie('user_info', $user_info, time()+24*60*60, '/', env('WP_SESSION_DOMAIN'));
     }
 }

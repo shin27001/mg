@@ -83,7 +83,7 @@ class FavoriteController extends Controller
             'favorites' => $favorites,
         ]);
         # クッキーへ保存
-        setcookie('user_info', $user_info, time()+24*60*60, '/', '.rlf.local');
+        setcookie('user_info', $user_info, time()+24*60*60, '/', env('WP_SESSION_DOMAIN'));
 
         // Log::debug(session('url.intended'), ['file' => __FILE__, 'line' => __LINE__]);
         if (session('url.intended')) {
