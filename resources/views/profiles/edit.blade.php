@@ -43,10 +43,10 @@ function account_delete_check(){
         <!-- 4個分のタブ -->
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a href="#profile" class="nav-link @if (!session('active_tab')) active @endif" data-toggle="tab">プロフィール</a>
+            <a href="#favorite" class="nav-link @if (!session('active_tab')) active @endif" data-toggle="tab">お気に入り</a>
           </li>
           <li class="nav-item">
-            <a href="#favorite" class="nav-link" data-toggle="tab">お気に入り</a>
+            <a href="#profile" class="nav-link @if (session('active_tab') == 'profile') active @endif" data-toggle="tab">プロフィール</a>
           </li>
           <li class="nav-item">
             <a href="#contact" class="nav-link @if (session('active_tab') == 'contact') active @endif" data-toggle="tab">お問い合わせ</a>
@@ -54,7 +54,47 @@ function account_delete_check(){
         </ul>
 
         <div class="tab-content">
-          <div id="profile" class="tab-pane fade @if (!session('active_tab')) show active @endif">
+          <div id="favorite" class="tab-pane fade @if (!session('active_tab')) show active @endif">
+            @if (!empty( $posts ))
+            <table class="table mt-3">
+              <thead>
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">画像</th>
+                  <th scope="col">店舗名</th>
+                  <th scope="col">住所</th>
+                  <th scope="col">TEL</th>
+                  <th scope="col">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($posts as $post)
+                  <tr>
+                    <th scope="row">{{$loop->iteration}}</th>
+                    <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank"><img src="{{$post->shop_main_image->guid}}" class="main_img"></a></td>
+                    <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank">{{$post->post_title}}</a></td>
+                    <td>{{$post->address->meta_value}}</td>
+                    <td>{{$post->tel_no->meta_value}}</td>
+                    <td>
+                      <form style="display:inline" action="{{ url('favorite/'.$post->favorite->id) }}" method="post" onSubmit="return check('{{$post->post_title}}');">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit" class="btn btn-danger">
+                              {{ __('Delete') }}
+                          </button>
+                      </form>
+                    </td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+            @else
+              <div class="col-md-8 mt-5 mx-auto">
+                お気に入りが登録されていません
+              </div>
+            @endif
+          </div>
+          <div id="profile" class="tab-pane fade @if (session('active_tab') == 'profile') show active @endif">
             @if (session('flash_message'))
               <div class="alert alert-success border mt-3 mb-3 p-3">
                 <p><i class="fas fa-info-circle"></i>お知らせ</p>
@@ -126,47 +166,7 @@ function account_delete_check(){
               <button type="submit" class="btn btn-danger">アカウント削除</button>
             </form>
             </div>
-          </div>
-          <div id="favorite" class="tab-pane fade">
-            @if (!empty( $posts ))
-            <table class="table mt-3">
-              <thead>
-                <tr>
-                  <th scope="col">No</th>
-                  <th scope="col">画像</th>
-                  <th scope="col">店舗名</th>
-                  <th scope="col">住所</th>
-                  <th scope="col">TEL</th>
-                  <th scope="col">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($posts as $post)
-                  <tr>
-                    <th scope="row">{{$loop->iteration}}</th>
-                    <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank"><img src="{{$post->shop_main_image->guid}}" class="main_img"></a></td>
-                    <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank">{{$post->post_title}}</a></td>
-                    <td>{{$post->address->meta_value}}</td>
-                    <td>{{$post->tel_no->meta_value}}</td>
-                    <td>
-                      <form style="display:inline" action="{{ url('favorite/'.$post->favorite->id) }}" method="post" onSubmit="return check('{{$post->post_title}}');">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="btn btn-danger">
-                              {{ __('Delete') }}
-                          </button>
-                      </form>
-                    </td>
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
-            @else
-              <div class="col-md-8 mt-5 mx-auto">
-                お気に入りが登録されていません
-              </div>
-            @endif
-          </div>
+          </div>          
           <div id="contact" class="tab-pane fade @if (session('active_tab') == 'contact') show active @endif">
             @if (session('flash_inquiry_message'))
               <div class="alert alert-success border mt-3 mb-3 p-3">

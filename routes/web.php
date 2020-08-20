@@ -23,7 +23,8 @@ Route::get('/', 'MyPageController@index')->middleware('auth');
 // Route::get('/favorite/auth', 'FavoriteController@auth');
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::resource('/home', 'MyPageController')->middleware('auth');
+// Route::get('/home', 'HomeController@index')->name('home');
 // Route::get('/mypage', 'MyPageController@index');
 Route::resource('/mypage', 'MyPageController')->middleware('auth');
 // Route::delete('/mypage/{id}', 'FavoriteController@destroy')->middleware('auth');

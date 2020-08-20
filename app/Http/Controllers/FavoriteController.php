@@ -70,6 +70,21 @@ class FavoriteController extends Controller
             $favorite->save();
         }
         session()->forget('favorite');
+
+        # ユーザ情報(Cookie)更新処理
+        # LoginControllerと二重に書いているので、整理しないといけない
+        $favorites = array();
+        foreach ($user->favorites as $key => $val) {
+            $favorites[] = $val['pref'].$val['shop_id'];
+        }
+        $user_info = json_encode([
+            'login_id'  => $user->email, 
+            'nickname'  => ((empty($user->profile->nickname)) ? $user->name : $user->profile->nickname),
+            'favorites' => $favorites,
+        ]);
+        # クッキーへ保存
+        setcookie('user_info', $user_info, time()+24*60*60, '/', '.rlf.local');
+
         // Log::debug(session('url.intended'), ['file' => __FILE__, 'line' => __LINE__]);
         if (session('url.intended')) {
             return redirect(session('url.intended'));

@@ -4,6 +4,10 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <!-- <div class="mx-auto" style="width:200px;">
+                <a href="" class="btn btn-primary">新規登録</a>
+            </div> -->
+            <a href="{{ route('register') }}" class="btn btn-m-red btn-register"><i class="fas fa-edit"></i> 新規登録</a>
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
 
