@@ -16,7 +16,10 @@ class MyPageController extends Controller
     public function __construct()
     {   
         session()->forget('pref');
-        $pref = (strpos($_SERVER['HTTP_REFERER'], 'okinawa')) ? "okinawa" : "kyoto";
+        $pref = 'okinawa';
+        if(!empty($_SERVER['HTTP_REFERER'])) {
+            $pref = (strpos($_SERVER['HTTP_REFERER'], 'okinawa')) ? "okinawa" : "kyoto";
+        }
         session(['pref' => $pref]);
 
     }

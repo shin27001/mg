@@ -71,8 +71,11 @@ class LoginController extends Controller
     public function showLoginForm(Request $request)
     {
         # 沖縄 or 京都 のどちらからログインされたかクッキーに保存
-        // session()->forget('pref');
-        $pref = (strpos($_SERVER['HTTP_REFERER'], 'okinawa')) ? "okinawa" : "kyoto";
+        session()->forget('pref');
+        $pref = 'okinawa';
+        if(!empty($_SERVER['HTTP_REFERER'])) {
+            $pref = (strpos($_SERVER['HTTP_REFERER'], 'okinawa')) ? "okinawa" : "kyoto";
+        }
         session(['pref' => $pref]);
         // \Log::debug('');
 

@@ -36,6 +36,16 @@
             <li class="l-header__nav-item"><a href="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/entry"><i class="fas fa-edit"></i> 飲食店の皆様へ</a></li>
             <li class="l-header__nav-item"><a href="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/contact"><i class="far fa-envelope"></i> お問い合わせ</a></li>
             <li class="l-header__nav-item"><?php echo (session('pref') == 'okinawa') ? '<a href="'.env('WP_URL').'/kyoto"><i class="fas fa-external-link-alt"></i> 京都版</a></li>' : '<a href="'.env('WP_URL').'/okinawa"><i class="fas fa-external-link-alt"></i> 沖縄版</a></li>'; ?></li>
+
+            <!-- <li class="l-header__nav-item">
+              <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                  ログアウト
+              </a>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  @csrf
+              </form>
+            </li> -->
+
           </ul>
         </nav>
         <nav class="navbar navbar-expand-md navbar-light bg-white">
