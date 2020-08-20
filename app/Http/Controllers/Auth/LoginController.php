@@ -45,10 +45,12 @@ class LoginController extends Controller
     protected function loggedOut(\Illuminate\Http\Request $request)
     {
         //\Log::debug('ログアウト');
-        // \Log::debug(env('WP_URL'));
+        //\Log::debug(env('WP_URL'));
 
         # ログイン情報のクッキー削除
+        session()->forget('pref');
         setcookie("user_info", "", time()-60*60*60, '/', env('WP_SESSION_DOMAIN'));
+
         return redirect(env('WP_URL'));
     }
     // public function redirectPath()
@@ -68,12 +70,11 @@ class LoginController extends Controller
      */
     public function showLoginForm(Request $request)
     {
-        \Log::debug('ログインフォーム');
-        \Log::debug(parse_url($_SERVER['HTTP_REFERER']));
-
+        # 沖縄 or 京都 のどちらからログインされたかクッキーに保存
+        // session()->forget('pref');
         $pref = (strpos($_SERVER['HTTP_REFERER'], 'okinawa')) ? "okinawa" : "kyoto";
         session(['pref' => $pref]);
-        \Log::debug(session('pref'));
+        // \Log::debug('');
 
         if($request->page) {
             session(['url.intended' => '/'.$request->page]);
@@ -102,7 +103,7 @@ class LoginController extends Controller
         foreach ($user->favorites as $key => $val) {
             $favorites[] = $val['pref'].$val['shop_id'];
         }
-        # 配列へJSON形式で格納 
+        # 配列へJSON形式で格納
         $user_info = json_encode([
             'login_id'  => $user->email, 
             'nickname'  => ((empty($user->profile->nickname)) ? $user->name : $user->profile->nickname),

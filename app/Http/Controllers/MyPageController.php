@@ -12,6 +12,15 @@ use App\Wp\Connection;
 
 class MyPageController extends Controller
 {   
+
+    public function __construct()
+    {   
+        session()->forget('pref');
+        $pref = (strpos($_SERVER['HTTP_REFERER'], 'okinawa')) ? "okinawa" : "kyoto";
+        session(['pref' => $pref]);
+
+    }
+
     public function db_name($pref) {
         return ($pref == 'okinawa') ? 'mysql_wp_ok' : 'mysql_wp_kt';
     }
@@ -48,9 +57,6 @@ class MyPageController extends Controller
             return redirect('/mypage/create'); 
         }
 
-        // \Log::debug('gohan_session');
-        // \Log::debug(session('gohan_session'));
-
         $posts = $this->get_favorites($user);
         return view('profiles.edit', [
             'user' => $user,
@@ -72,7 +78,6 @@ class MyPageController extends Controller
 
     public function store(Request $request) 
     {
-
         $validator = \Validator::make($request->all(), [
             'user_id'  => 'required',
             'nickname' => 'required|unique:profiles|max:20',

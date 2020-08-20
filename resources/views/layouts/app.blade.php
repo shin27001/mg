@@ -19,7 +19,7 @@
       <div class="l-header__inner">
         <div class="mobile__menu">
           <p class="l-header__logo"> <a href="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>" class="header__logoLink">
-              アフターコロナ応援グルメサイト<br><img src="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/wp-content/themes/ryukyu-leaf/images/logo.svg" alt="ごはん旅">
+              アフターコロナ応援グルメサイト<br><img src="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/wp-content/themes/ryukyu-leaf/images/logo.svg?<?php echo date('Ymd-His'); ?>" alt="ごはん旅">
             </a></p>
           <div class="mobile__toggle">
             <div>
