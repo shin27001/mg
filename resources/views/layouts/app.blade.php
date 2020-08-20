@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
   <script src="https://kit.fontawesome.com/cd70ed3316.js" crossorigin="anonymous"></script>
   <script src="{{ asset('js/app.js') }}" defer></script>
+  @yield('css')
 </head>
 
 <body>
@@ -119,6 +120,7 @@
       <!-- <script src="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/wp-content/themes/ryukyu-leaf/scripts/main.js?<?php echo date('Ymd-Hi'); ?>"></script> -->
       <!-- <script src="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/wp-content/themes/ryukyu-leaf/scripts/libs/main-slider.js"></script> -->
   </div>
+  @yield('js')
 </body>
 
 </html>
