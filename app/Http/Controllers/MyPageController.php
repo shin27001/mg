@@ -15,6 +15,7 @@ class MyPageController extends Controller
     public function db_name($pref) {
         return ($pref == 'okinawa') ? 'mysql_wp_ok' : 'mysql_wp_kt';
     }
+
     public function get_favorites(User $user) {
         $post = new Post;
         $meta = new PostMeta;
@@ -46,6 +47,9 @@ class MyPageController extends Controller
         if (!$user->profile) {
             return redirect('/mypage/create'); 
         }
+
+        // \Log::debug('gohan_session');
+        // \Log::debug(session('gohan_session'));
 
         $posts = $this->get_favorites($user);
         return view('profiles.edit', [

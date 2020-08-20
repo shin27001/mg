@@ -44,8 +44,11 @@ class LoginController extends Controller
 
     protected function loggedOut(\Illuminate\Http\Request $request)
     {
-        // \Log::debug('ログアウト');
+        //\Log::debug('ログアウト');
         // \Log::debug(env('WP_URL'));
+
+        # ログイン情報のクッキー削除
+        setcookie("user_info", "", time()-60*60*60, '/', env('WP_SESSION_DOMAIN'));
         return redirect(env('WP_URL'));
     }
     // public function redirectPath()
