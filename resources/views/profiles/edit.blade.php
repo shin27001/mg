@@ -56,38 +56,40 @@ function account_delete_check(){
         <div class="tab-content">
           <div id="favorite" class="tab-pane fade @if (!session('active_tab')) show active @endif">
             @if (!empty( $posts ))
-            <table class="table mt-3">
-              <thead>
-                <tr>
-                  <th scope="col">No</th>
-                  <th scope="col">画像</th>
-                  <th scope="col">店舗名</th>
-                  <th scope="col">住所</th>
-                  <th scope="col">TEL</th>
-                  <th scope="col">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($posts as $post)
+            <div class="table-responsive">
+              <table class="table text-nowrap mt-3">
+                <thead>
                   <tr>
-                    <th scope="row">{{$loop->iteration}}</th>
-                    <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank"><img src="{{$post->shop_main_image->guid}}" class="main_img"></a></td>
-                    <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank">{{$post->post_title}}</a></td>
-                    <td>{{$post->address->meta_value}}</td>
-                    <td>{{$post->tel_no->meta_value}}</td>
-                    <td>
-                      <form style="display:inline" action="{{ url('favorite/'.$post->favorite->id) }}" method="post" onSubmit="return check('{{$post->post_title}}');">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="btn btn-danger">
-                              {{ __('Delete') }}
-                          </button>
-                      </form>
-                    </td>
+                    <th scope="col" class="text-nowrap">No</th>
+                    <th scope="col" class="text-nowrap">画像</th>
+                    <th scope="col" class="text-nowrap">店舗名</th>
+                    <th scope="col" class="text-nowrap">住所</th>
+                    <th scope="col" class="text-nowrap">TEL</th>
+                    <th scope="col" class="text-nowrap">操作</th>
                   </tr>
-                @endforeach
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  @foreach ($posts as $post)
+                    <tr>
+                      <th scope="row">{{$loop->iteration}}</th>
+                      <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank"><img src="{{$post->shop_main_image->guid}}" class="main_img"></a></td>
+                      <td><a href="{{env('WP_URL').'/'.$post->favorite->pref.'/shops/?p='.$post->favorite->shop_id}}" target="_blank">{{$post->post_title}}</a></td>
+                      <td>{{$post->address->meta_value}}</td>
+                      <td>{{$post->tel_no->meta_value}}</td>
+                      <td>
+                        <form style="display:inline" action="{{ url('favorite/'.$post->favorite->id) }}" method="post" onSubmit="return check('{{$post->post_title}}');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">
+                                {{ __('Delete') }}
+                            </button>
+                        </form>
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
             @else
               <div class="col-md-8 mt-5 mx-auto">
                 お気に入りが登録されていません
