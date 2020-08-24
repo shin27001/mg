@@ -14,30 +14,17 @@ class FavoriteController extends Controller
 
     public function __construct()
     {
-
-        // $path = parse_url($_SERVER['HTTP_REFERER']); // URLを分解
-        // echo url()->full();
-        Log::debug(url()->full(), ['file' => __FILE__, 'line' => __LINE__]);
-        Log::debug(parse_url(url()->full()), ['file' => __FILE__, 'line' => __LINE__]);
-        
-
-        if (!\Auth::check()) {
-            Log::debug('ログインしていない');
-            // セッションへ保存
-            session(['favorite' => url()->full()]);
+        // セッションへ保存
+        if (empty(session('back_url'))) {
+            session(['back_url' => url()->previous()]);
         }
+        session(['favorite_url' => url()->full()]);
 
-        // dd(url());
-        // $path = parse_url(url()->full());
-        // if (!empty($path['path'])) {
-        //     list($controller, $pref, $shop_id, $shop_slug) = explode("/", $path['path']);
-        //     if(!empty($shop_id)) {
-        //         // セッションへ保存
-        //         session(['url.favorite' => url()->full()]);
-        //     }
-        // }
+        // Log::debug('__construct', ['line' => __LINE__, 'file' => __FILE__]);
+        // Log::debug(session('favorite_url'), ['line' => __LINE__, 'file' => __FILE__]);
+        // Log::debug(session('back_url'), ['line' => __LINE__, 'file' => __FILE__]);
 
-        // $request->fullUrl()
+        // 認証チェック
         $this->middleware('auth');
     }
 
@@ -55,13 +42,12 @@ class FavoriteController extends Controller
      */
     public function index($pref, $shop_id, $shop_slug)
     {   
-        \Debugbar::disable();
+        // \Debugbar::disable();
 
         $user = \Auth::user();
 
         $favorite = Favorite::where('user_id', $user->id)->where('pref', $pref)->where('shop_id', $shop_id)->get();
         if($favorite->isEmpty()) {
-
             $favorite = new Favorite;
             $favorite->user_id = $user->id;
             $favorite->pref = htmlspecialchars($pref, ENT_QUOTES);
@@ -84,29 +70,11 @@ class FavoriteController extends Controller
         ]);
         # クッキーへ保存
         setcookie('user_info', $user_info, time()+24*60*60, '/', env('WP_SESSION_DOMAIN'));
-
-        // Log::debug(session('url.intended'), ['file' => __FILE__, 'line' => __LINE__]);
-        if (session('url.intended')) {
-            return redirect(session('url.intended'));
-        } else {
-            return redirect(url()->previous());
-        }
-
-        // return response()->json();
-        // exit;
-        // return true;
-        // print_r($request->all());
         
-        // $favorite = new Favorite;
-        // $favorite->fill( $request->all() ); 
-        // $favorite->save(); 
-        // print_r($favorite);
-        // $user = \Auth::user();
-        // if(!$user) {
-        //   return redirect('/mypage/'.$profile->user_id.'/edit');
-        // }
-        // echo "id -- ".$id;
-        // exit;
+        // sessionのback_urlを削除してからリダイレクト
+        $back_url = session('back_url');
+        session()->forget('back_url');
+        return redirect($back_url);
     }
 
     /**

@@ -44,24 +44,12 @@ class LoginController extends Controller
 
     protected function loggedOut(\Illuminate\Http\Request $request)
     {
-        //\Log::debug('ログアウト');
-        //\Log::debug(env('WP_URL'));
-
         # ログイン情報のクッキー削除
         session()->forget('pref');
         setcookie("user_info", "", time()-60*60*60, '/', env('WP_SESSION_DOMAIN'));
 
         return redirect(env('WP_URL'));
     }
-    // public function redirectPath()
-    // {   
-
-    //     return '/mypage';
-
-    //     $cookie = $_COOKIE['redirect_url'];
-    //     setcookie('redirect_url', "", time()-60);
-    //     return ($cookie) ? $cookie : '/mypage';
-    // }
 
      /**
      * Show the application's login form.
@@ -70,31 +58,62 @@ class LoginController extends Controller
      */
     public function showLoginForm(Request $request)
     {
-        # 沖縄 or 京都 のどちらからログインされたかクッキーに保存
-        session()->forget('pref');
-        $pref = 'okinawa';
-        if(!empty($_SERVER['HTTP_REFERER'])) {
+        ###############################
+        #
+        # 沖縄 or 京都 のどちらからログイン
+        # されたかクッキーに保存
+        #
+        ###############################
+        // \Log::debug(parse_url(url()->previous()), ['file' => __FILE__, 'line' => __LINE__]);
+        $hosts = array('rlf.local', 'gohan-tabi.com');
+        $referer_url = parse_url(url()->previous());
+        session(['pref' => 'okinawa']); //初期値
+        if((in_array($referer_url['host'], $hosts)) && (!empty($_SERVER['HTTP_REFERER']))) {
             $pref = (strpos($_SERVER['HTTP_REFERER'], 'okinawa')) ? "okinawa" : "kyoto";
+            session(['pref' => $pref]);
         }
-        session(['pref' => $pref]);
-        // \Log::debug('');
+        
+        // \Log::debug('showLoginForm', ['line' => __LINE__, 'file' => __FILE__]);
+        // \Log::debug($request->page,  ['line' => __LINE__, 'file' => __FILE__]);
+        // \Log::debug(session('pref'), ['line' => __LINE__, 'file' => __FILE__]);
+        
 
-        if($request->page) {
-            session(['url.intended' => '/'.$request->page]);
+        ##########################
+        # 未ログインで、
+        # ログインボタンを押された時
+        # の処理
+        ##########################
+        if ($request->input('page')) {
+            # ログイン後、「mypage」へ遷移
+            session(['url.intended' => $request->input('page')]);
             return view('auth.login');
         }
         
-        // ここから
-        if (array_key_exists('HTTP_REFERER', $_SERVER)) {
-            session(['url.intended' => $_SERVER['HTTP_REFERER']]);
+        ##########################
+        # 未ログインで、
+        # お気に入りボタンを押された時
+        # の処理
+        ##########################
+        if (empty(session('back_url'))) {
+        // if (array_key_exists('HTTP_REFERER', $_SERVER)) {
+            # ログイン後、店舗詳細へ戻る
+            session(['back_url' => $_SERVER['HTTP_REFERER']]);
+            // session(['url.intended' => $_SERVER['HTTP_REFERER']]);
             // $path = parse_url($_SERVER['HTTP_REFERER']); // URLを分解
         }
-        // ここまで追加
+        \Log::debug(session('back_url'), ['line' => __LINE__, 'file' => __FILE__]);
+
         return view('auth.login');
     }
 
     protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
+
+        // \Log::debug('authenticated', ['line' => __LINE__, 'file' => __FILE__]);
+        // \Log::debug(session('back_url'), ['line' => __LINE__, 'file' => __FILE__]);
+        // \Log::debug(session('favorite'), ['line' => __LINE__, 'file' => __FILE__]);
+        
+
         #############################
         #
         # ログイン情報をクッキーへ保存
@@ -117,5 +136,24 @@ class LoginController extends Controller
         // \Log::debug($user_info);
         # クッキーへ保存
         setcookie('user_info', $user_info, time()+24*60*60, '/', env('WP_SESSION_DOMAIN'));
+
+
+        ###############################
+        #
+        # 未ログイン時のお気に入り登録処理
+        #
+        ###############################
+        if (session('url.intended') == 'mypage') {
+            // \Log::debug('url.intended - go', ['line' => __LINE__, 'file' => __FILE__]);
+            return redirect(session('url.intended'));
+        } elseif(!empty(session('favorite_url'))) {
+            // \Log::debug('favorite_url - go', ['line' => __LINE__, 'file' => __FILE__]);
+            return redirect(session('favorite_url'));
+        } elseif(!empty(session('back_url'))) {
+            // \Log::debug('back_url - go', ['line' => __LINE__, 'file' => __FILE__]);
+            return redirect(session('back_url'));
+        }
+        // \Log::debug('url.intended - end go', ['line' => __LINE__, 'file' => __FILE__]);
+        return redirect(session('url.intended'));
     }
 }
