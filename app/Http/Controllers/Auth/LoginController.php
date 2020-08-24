@@ -94,12 +94,14 @@ class LoginController extends Controller
         # お気に入りボタンを押された時
         # の処理
         ##########################
+        session(['back_url' => 'mypage']);
         if (empty(session('back_url'))) {
-        // if (array_key_exists('HTTP_REFERER', $_SERVER)) {
-            # ログイン後、店舗詳細へ戻る
-            session(['back_url' => $_SERVER['HTTP_REFERER']]);
-            // session(['url.intended' => $_SERVER['HTTP_REFERER']]);
-            // $path = parse_url($_SERVER['HTTP_REFERER']); // URLを分解
+            if (array_key_exists('HTTP_REFERER', $_SERVER)) {
+                # ログイン後、店舗詳細へ戻る
+                session(['back_url' => $_SERVER['HTTP_REFERER']]);
+                // session(['url.intended' => $_SERVER['HTTP_REFERER']]);
+                // $path = parse_url($_SERVER['HTTP_REFERER']); // URLを分解
+            }
         }
         \Log::debug(session('back_url'), ['line' => __LINE__, 'file' => __FILE__]);
 
