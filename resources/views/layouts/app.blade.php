@@ -7,9 +7,9 @@
   <title>@yield('title')</title>
   <link href="{{ asset('css/style.css') }}" media="all" rel="stylesheet" type="text/css" />
   <link rel="shortcut icon" href="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/wp-content/themes/ryukyu-leaf/images/favicon.ico" />
-  <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/app.css') }}?<?php echo date('Ymd-Hi'); ?>">
   <script src="https://kit.fontawesome.com/cd70ed3316.js" crossorigin="anonymous"></script>
-  <script src="{{ asset('js/app.js') }}" defer></script>
+  <script src="{{ asset('js/app.js') }}?<?php echo date('Ymd-Hi'); ?>" defer></script>
   @yield('css')
 </head>
 
