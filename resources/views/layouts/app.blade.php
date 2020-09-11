@@ -31,12 +31,14 @@
         </div>
         <nav class="l-header__nav">
           <ul class="l-header__nav-list">
-            <li class="l-header__nav-item"><a href="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/feature"><i class="fas fa-star"></i> GO!HAN旅の特徴</a></a></li>
+            <li class="l-header__nav-item"><a href="<?php echo env('WP_URL'); ?>/"><i class="fas fa-star"></i> GO!HAN旅の特徴</a></a></li>
             <li class="l-header__nav-item"><a href="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/shops"><i class="fas fa-list-ul"></i> 飲食店一覧</a></li>
             <li class="l-header__nav-item"><a href="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/entry"><i class="fas fa-edit"></i> 飲食店の皆様へ</a></li>
             <li class="l-header__nav-item"><a href="<?php echo env('WP_URL'); ?>/<?php echo session('pref'); ?>/contact"><i class="far fa-envelope"></i> お問い合わせ</a></li>
             <li class="l-header__nav-item"><?php echo (session('pref') == 'okinawa') ? '<a href="'.env('WP_URL').'/kyoto"><i class="fas fa-external-link-alt"></i> 京都版</a></li>' : '<a href="'.env('WP_URL').'/okinawa"><i class="fas fa-external-link-alt"></i> 沖縄版</a></li>'; ?></li>
-
+            @guest
+            <li class="l-header__nav-item"><a href="/login"><i class="fas fa-user"></i> ログイン</a></li>
+            @endguest
             <!-- <li class="l-header__nav-item">
               <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   ログアウト
@@ -67,6 +69,7 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
+                        {{--
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
@@ -75,6 +78,7 @@
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
+                        --}}
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
