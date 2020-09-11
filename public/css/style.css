@@ -1,11 +1,9 @@
 
 .main-mt {
-  margin-top: 100px;
+  margin-top: 50px;
 }
 
-.btn-register {
-  height: 3em;
-  width: 200px;
+.mb-20 {
   margin-bottom: 20px;
 }
 
@@ -15,6 +13,56 @@ li {
   margin: 0;
   padding: 0;
 }
+
+.member-box {
+  margin-top: 24px;
+  padding: 30px;
+  background: #f3f3f3;
+  text-align: center;
+}
+.member-box .to-users__read {
+  position: relative;
+  text-align: center;
+  color: #d84315;
+  font-size: 18px;
+  margin-bottom: 40px;
+  font-weight: 600;
+}
+
+.member-box .to-users__read::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 2px;
+  background-color: #d84315;
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+}
+.member-box .btn {
+  position: relative;
+  display: inline-block;
+  background-color: white;
+  border: 1px solid #d84315;
+  border-radius: 40px;
+  font-weight: 600;
+  padding: 10px 40px;
+  margin: 10px auto;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  color: #d84315;
+  text-decoration: none !important;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center;
+}
+
 
 .l-wrap {
   display: flex;

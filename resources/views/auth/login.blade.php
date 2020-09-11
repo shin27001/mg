@@ -7,7 +7,14 @@
             <!-- <div class="mx-auto" style="width:200px;">
                 <a href="" class="btn btn-primary">新規登録</a>
             </div> -->
-            <a href="{{ route('register') }}" class="btn btn-m-red btn-register"><i class="fas fa-edit"></i> 新規登録</a>
+            <div class="member-box mb-20">
+              <p class="to-users__read">
+                無料会員登録でもっとごはん旅を楽しもう！
+              </p>
+              <p>無料会員登録をしていただくと、飲食店のお気に入り登録ができます。<br>気になるお店をマイページに保存しておけるので便利！</p>
+              <p class="btn-wrap"><a href="{{ route('register') }}" class="btn">
+                  無料会員登録<span>はこちら</span> <i class="fas fa-arrow-right"></i></a></p>
+            </div>
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
 
