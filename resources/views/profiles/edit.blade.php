@@ -216,12 +216,12 @@ function account_delete_check(){
                   <div id="comment-{{$inquiry->id}}" class="collapse @if(session('active_collapse') == $inquiry->id) show @endif" aria-labelledby="title-{{$inquiry->id}}" data-parent="#inquiries">
                     <div class="card-body">
                       {{$inquiry->created_at}}
-                      <p>{{$inquiry->comment}}</p>
+                      <p>{!! nl2br(e($inquiry->comment)) !!}</p>
                       <div class="mt-3">
                       @foreach ($inquiry->replies as $reply)
                         <div class="alert alert-info border mb-2">
                           {{$reply->created_at}}
-                          <p>{{$reply->reply_comment}}</p>
+                          <p>{!! nl2br($reply->reply_comment) !!}</p>
                         </div>
                       @endforeach
                       </div>
