@@ -69,7 +69,7 @@ class LoginController extends Controller
         $hosts = array('gohan-tabi.com', 'rlf.local', 'gohan.sem-cloud.com');
         $referer_url = parse_url(url()->previous());
         session(['pref' => 'okinawa']); //初期値
-        if((in_array($referer_url['host'], $hosts)) && (!empty($_SERVER['HTTP_REFERER']))) {
+        if((empty(session('pref'))) && (in_array($referer_url['host'], $hosts)) && (!empty($_SERVER['HTTP_REFERER']))) {
             $pref = (strpos($_SERVER['HTTP_REFERER'], 'okinawa')) ? "okinawa" : "kyoto";
             session(['pref' => $pref]);
         }

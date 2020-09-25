@@ -22,6 +22,13 @@ class FavoriteController extends Controller
         //お気に入りURLを保存
         session(['favorite' => url()->full()]);
 
+        # Pref(都道府県)設定処理
+        # LoginControllerと二重に書いているので、整理しないといけない
+        if(!empty($_SERVER['HTTP_REFERER'])) {
+            $pref = (strpos($_SERVER['HTTP_REFERER'], 'okinawa')) ? "okinawa" : "kyoto";
+            session(['pref' => $pref]);
+        }
+
         // 認証チェック
         $this->middleware('auth');
     }
@@ -66,10 +73,13 @@ class FavoriteController extends Controller
         # クッキーへ保存
         setcookie('user_info', $user_info, time()+24*60*60, '/', env('WP_SESSION_DOMAIN'));
         
-        // sessionの「page」を削除してからリダイレクト
-        $redirect_page = session('page');
-        session()->forget('page');
-        return redirect($redirect_page);
+        if (session('page')) {
+            // sessionの「page」を削除してからリダイレクト
+            $redirect_page = session('page');
+            session()->forget('page');
+            return redirect($redirect_page);    
+        }
+        return redirect(env('WP_URL'));
     }
 
     /**
