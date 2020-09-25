@@ -76,35 +76,20 @@ class RegisterController extends Controller
 
 
     public function showRegistrationForm() {
-        Log::debug('デバッグメッセージ');
-        Log::debug(session('url.intended'), ['line' => __LINE__, 'file' => __FILE__]);
-        Log::debug(session('favorite_url'), ['line' => __LINE__, 'file' => __FILE__]);
-        Log::debug(session('back_url'), ['line' => __LINE__, 'file' => __FILE__]);
-
         return view('auth.register');
     }
     
     protected function registered(Request $request, $user) {
-        // Log::debug('registeredメッセージ');
-        // Log::debug(session('favorite_url'));
-
-
         ###############################
         #
         # 未登録時のお気に入りリダイレクト処理
         #
         ###############################
-        if (session('url.intended') == 'mypage') {
-            // \Log::debug('url.intended - go', ['line' => __LINE__, 'file' => __FILE__]);
-            return redirect(session('url.intended'));
-        } elseif(!empty(session('favorite_url'))) {
-            // \Log::debug('favorite_url - go', ['line' => __LINE__, 'file' => __FILE__]);
-            return redirect(session('favorite_url'));
-        } elseif(!empty(session('back_url'))) {
-            // \Log::debug('back_url - go', ['line' => __LINE__, 'file' => __FILE__]);
-            return redirect(session('back_url'));
+        if (session('favorite')) {
+            return redirect(session('favorite'));
+        } elseif (session('page')) {
+            return redirect(session('page'));
         }
-        // \Log::debug('url.intended - end go', ['line' => __LINE__, 'file' => __FILE__]);
         return redirect(session('url.intended'));        
    }
 

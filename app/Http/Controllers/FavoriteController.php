@@ -12,17 +12,15 @@ use Illuminate\Support\Facades\Log;
 class FavoriteController extends Controller
 {
 
-    public function __construct()
-    {
-        // セッションへ保存
-        if (empty(session('back_url'))) {
-            session(['back_url' => url()->previous()]);
+    public function __construct(Request $request)
+    {        
+        // セッションへ遷移先ページを保存
+        if ($request->input('page')) {
+            # ログイン後、パラメータ「page」で設定したルーティングへ遷移
+            session(['page' => $request->input('page')]);
         }
-        session(['favorite_url' => url()->full()]);
-
-        // Log::debug('__construct', ['line' => __LINE__, 'file' => __FILE__]);
-        // Log::debug(session('favorite_url'), ['line' => __LINE__, 'file' => __FILE__]);
-        // Log::debug(session('back_url'), ['line' => __LINE__, 'file' => __FILE__]);
+        //お気に入りURLを保存
+        session(['favorite' => url()->full()]);
 
         // 認証チェック
         $this->middleware('auth');
@@ -31,8 +29,6 @@ class FavoriteController extends Controller
     public function auth()
     {
         \Debugbar::disable();
-        // return "aaaaaaaaaaaaaa";
-        // return json_encode(['auth' => \Auth::check()]);
         return response()->json(['auth' => \Auth::check()]);
     }
     /**
@@ -42,8 +38,7 @@ class FavoriteController extends Controller
      */
     public function index($pref, $shop_id, $shop_slug)
     {   
-        // \Debugbar::disable();
-
+        # ユーザ情報を取得ß
         $user = \Auth::user();
 
         $favorite = Favorite::where('user_id', $user->id)->where('pref', $pref)->where('shop_id', $shop_id)->get();
@@ -71,10 +66,10 @@ class FavoriteController extends Controller
         # クッキーへ保存
         setcookie('user_info', $user_info, time()+24*60*60, '/', env('WP_SESSION_DOMAIN'));
         
-        // sessionのback_urlを削除してからリダイレクト
-        $back_url = session('back_url');
-        session()->forget('back_url');
-        return redirect($back_url);
+        // sessionの「page」を削除してからリダイレクト
+        $redirect_page = session('page');
+        session()->forget('page');
+        return redirect($redirect_page);
     }
 
     /**
